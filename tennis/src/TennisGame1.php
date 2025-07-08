@@ -6,9 +6,9 @@ namespace TennisGame;
 
 class TennisGame1 implements TennisGame
 {
-    private int $m_score1 = 0;
+    private int $player1Score = 0;
 
-    private int $m_score2 = 0;
+    private int $player2Score = 0;
 
     public function __construct(
         private string $player1Name,
@@ -19,57 +19,84 @@ class TennisGame1 implements TennisGame
     public function wonPoint(string $playerName): void
     {
         if ($playerName === 'player1') {
-            $this->m_score1++;
-        } else {
-            $this->m_score2++;
+            $this->player1Score++;
+
+            return;
         }
+
+        $this->player2Score++;
     }
 
     public function getScore(): string
     {
+        $score = $this->scoreDraw($this->player1Score, $this->player2Score);
+        if ($score !== '') {
+            return $score;
+        }
+
+        $finalResult = $this->scoreFinalSet($this->player1Score, $this->player2Score);
+        if ($finalResult !== '') {
+            return $finalResult;
+        }
+
+        return $this->nextScore($this->player1Score, $this->player2Score);
+    }
+
+    private function nextScore(int $p1Score, int $p2Score): string
+    {
         $score = '';
-        if ($this->m_score1 === $this->m_score2) {
-            $score = match ($this->m_score1) {
+        for ($i = 1; $i < 3; $i++) {
+            if ($i === 1) {
+                $tempScore = $p1Score;
+            } else {
+                $score .= '-';
+                $tempScore = $p2Score;
+            }
+
+            $score .= match ($tempScore) {
+                0 => 'Love',
+                1 => 'Fifteen',
+                2 => 'Thirty',
+                3 => 'Forty',
+            };
+        }
+
+        return $score;
+    }
+
+    private function scoreFinalSet(int $p1Score, int $p2Score)
+    {
+        if ($p1Score >= 4 || $p2Score >= 4) {
+            $minusResult = $p1Score - $p2Score;
+            if ($minusResult === 1) {
+                return 'Advantage player1';
+            }
+            if ($minusResult === -1) {
+                return 'Advantage player2';
+            }
+            if ($minusResult >= 2) {
+                return 'Win for player1';
+            }
+
+            return 'Win for player2';
+        }
+
+        return '';
+    }
+
+    private function scoreDraw(int $p1Score, int $p2Score): string
+    {
+        if ($p1Score === $p2Score) {
+            $score = match ($p1Score) {
                 0 => 'Love-All',
                 1 => 'Fifteen-All',
                 2 => 'Thirty-All',
                 default => 'Deuce',
             };
-        } elseif ($this->m_score1 >= 4 || $this->m_score2 >= 4) {
-            $minusResult = $this->m_score1 - $this->m_score2;
-            if ($minusResult === 1) {
-                $score = 'Advantage player1';
-            } elseif ($minusResult === -1) {
-                $score = 'Advantage player2';
-            } elseif ($minusResult >= 2) {
-                $score = 'Win for player1';
-            } else {
-                $score = 'Win for player2';
-            }
-        } else {
-            for ($i = 1; $i < 3; $i++) {
-                if ($i === 1) {
-                    $tempScore = $this->m_score1;
-                } else {
-                    $score .= '-';
-                    $tempScore = $this->m_score2;
-                }
-                switch ($tempScore) {
-                    case 0:
-                        $score .= 'Love';
-                        break;
-                    case 1:
-                        $score .= 'Fifteen';
-                        break;
-                    case 2:
-                        $score .= 'Thirty';
-                        break;
-                    case 3:
-                        $score .= 'Forty';
-                        break;
-                }
-            }
+
+            return $score;
         }
-        return $score;
+
+        return '';
     }
 }
