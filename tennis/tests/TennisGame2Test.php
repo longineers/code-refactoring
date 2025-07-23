@@ -17,7 +17,7 @@ class TennisGame2Test extends TestMaster
     protected function setUp(): void
     {
         parent::setUp();
-        $this->game = new TennisGame2('player1', 'player2');
+        $this->game = new TennisGame2();
     }
 
     /**

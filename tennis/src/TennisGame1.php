@@ -6,13 +6,9 @@ namespace TennisGame;
 
 class TennisGame1 implements TennisGame
 {
-    private int $player1Score = 0;
-
-    private int $player2Score = 0;
-
     public function __construct(
-        private string $player1Name,
-        private string $player2Name
+        private int $player1Score = 0,
+        private int $player2Score = 0
     ) {
     }
 
@@ -58,13 +54,14 @@ class TennisGame1 implements TennisGame
                 1 => 'Fifteen',
                 2 => 'Thirty',
                 3 => 'Forty',
+                default => 'Undefined',
             };
         }
 
         return $score;
     }
 
-    private function scoreFinalSet(int $p1Score, int $p2Score)
+    private function scoreFinalSet(int $p1Score, int $p2Score): string
     {
         if ($p1Score >= 4 || $p2Score >= 4) {
             $minusResult = $p1Score - $p2Score;

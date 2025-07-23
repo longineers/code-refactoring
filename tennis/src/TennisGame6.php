@@ -6,21 +6,15 @@ namespace TennisGame;
 
 class TennisGame6 implements TennisGame
 {
-    private $player1Name;
-
-    private $player2Name;
-
-    private $player1Score = 0;
-
-    private $player2Score = 0;
-
-    public function __construct($player1Name, $player2Name)
-    {
-        $this->player1Name = $player1Name;
-        $this->player2Name = $player2Name;
+    public function __construct(
+        private string $player1Name,
+        private string $player2Name,
+        private int $player1Score = 0,
+        private int $player2Score = 0
+    ) {
     }
 
-    public function wonPoint($playerName): void
+    public function wonPoint(string $playerName): void
     {
         if ($playerName === 'player1') {
             $this->player1Score++;

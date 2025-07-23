@@ -6,17 +6,11 @@ namespace TennisGame;
 
 class TennisGame2 implements TennisGame
 {
-    private int $player1Point = 0;
-
-    private int $player2point = 0;
-
-    private string $player1Result = '';
-
-    private string $player2Result = '';
-
     public function __construct(
-        private string $player1Name,
-        private string $player2Name
+        private int $player1Point = 0,
+        private int $player2point = 0,
+        private string $player1Result = '',
+        private string $player2Result = ''
     ) {
     }
 
@@ -125,20 +119,6 @@ class TennisGame2 implements TennisGame
         if ($player === 'player1') {
             $this->P1Score();
         } else {
-            $this->P2Score();
-        }
-    }
-
-    private function SetP1Score(int $number): void
-    {
-        for ($i = 0; $i < $number; $i++) {
-            $this->P1Score();
-        }
-    }
-
-    private function SetP2Score(int $number): void
-    {
-        for ($i = 0; $i < $number; $i++) {
             $this->P2Score();
         }
     }
